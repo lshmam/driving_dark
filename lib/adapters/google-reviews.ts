@@ -3,18 +3,27 @@ import type { Review } from "@/types/review";
 
 export function adaptGoogleReview(googleReview: ReactGoogleReview): Review {
   return {
-    reviewId: googleReview.time?.toString() || null,
+    reviewId: googleReview.reviewId || null,
     reviewer: {
-      profilePhotoUrl: googleReview.profile_photo_url || "",
-      displayName: googleReview.author_name || "Anonymous",
-      isAnonymous: !googleReview.author_name,
+      profilePhotoUrl: googleReview.reviewer.profilePhotoUrl || "",
+      displayName: googleReview.reviewer.displayName || "Anonymous",
+      isAnonymous: googleReview.reviewer.isAnonymous,
     },
-    starRating: googleReview.rating || 0,
-    comment: googleReview.text || "",
-    createTime: googleReview.time
-      ? new Date(googleReview.time * 1000).toISOString()
+    starRating: googleReview.starRating || 0,
+    comment: googleReview.comment || "",
+    createTime: googleReview.createTime
+      ? new Date(googleReview.createTime).toISOString()
       : null,
-    updateTime: null, // Google API doesn't provide update time
-    reviewReply: null, // Handle review replies if available in your API
+    updateTime: googleReview.updateTime
+      ? new Date(googleReview.updateTime).toISOString()
+      : null,
+    reviewReply: googleReview.reviewReply
+      ? {
+          comment: googleReview.reviewReply.comment,
+          updateTime: new Date(
+            googleReview.reviewReply.updateTime
+          ).toISOString(),
+        }
+      : null,
   };
 }
