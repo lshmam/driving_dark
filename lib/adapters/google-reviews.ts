@@ -11,7 +11,9 @@ export function adaptGoogleReview(googleReview: ReactGoogleReview): Review {
     },
     starRating: googleReview.rating || 0,
     comment: googleReview.text || "",
-    createTime: googleReview.time ? new Date(googleReview.time * 1000).toISOString() : null,
+    createTime: googleReview.time
+      ? new Date(googleReview.time * 1000).toISOString()
+      : null,
     updateTime: null, // Google API doesn't provide update time
     reviewReply: null, // Handle review replies if available in your API
   };
